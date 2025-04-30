@@ -44,21 +44,25 @@ if st.button("🪄 AI 캐릭터 이미지 생성"):
             response = requests.post(url, headers=headers, json=payload)
             prediction = response.json()
 
-            # 예외처리
-            if "urls" not in prediction:
-                st.error("이미지 생성 실패! 프롬프트를 바꿔보거나 다시 시도해보세요.")
+            # 상태 코드가 200인지 확인
+            if response.status_code != 200:
+                st.error(f"API 호출 실패! 상태 코드: {response.status_code}")
+                st.error(f"API 응답 내용: {prediction}")
             else:
-                # 결과 대기 URL에서 이미지 얻기
-                get_url = prediction["urls"]["get"]
-                for _ in range(60):
-                    result = requests.get(get_url, headers=headers).json()
-                    if result.get("status") == "succeeded":
-                        image_url = result["output"][0]
-                        st.image(image_url, caption="✅ 생성된 AI 캐릭터 이미지", use_column_width=True)
-                        break
-                    elif result.get("status") == "failed":
-                        st.error("❌ 이미지 생성 중 오류가 발생했습니다.")
-                        break
+                if "urls" not in prediction:
+                    st.error("이미지 생성 실패! 프롬프트를 바꿔보거나 다시 시도해보세요.")
+                else:
+                    # 결과 대기 URL에서 이미지 얻기
+                    get_url = prediction["urls"]["get"]
+                    for _ in range(60):
+                        result = requests.get(get_url, headers=headers).json()
+                        if result.get("status") == "succeeded":
+                            image_url = result["output"][0]
+                            st.image(image_url, caption="✅ 생성된 AI 캐릭터 이미지", use_column_width=True)
+                            break
+                        elif result.get("status") == "failed":
+                            st.error("❌ 이미지 생성 중 오류가 발생했습니다.")
+                            break
 import requests
 
 st.markdown("---")
