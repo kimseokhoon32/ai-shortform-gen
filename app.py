@@ -30,7 +30,7 @@ if st.button("🪄 AI 캐릭터 이미지 생성"):
             # Replicate API 호출
             url = "https://api.replicate.com/v1/predictions"
             headers = {
-                "Authorization": "Token r8_E2uChsMnSRUm1yuJQ5hwJp5TsWgh3nU45sJjC",
+                "Authorization": "Token r8_VhgUwR0BsTSJhdc3VenQj97jsddO2Xc1KiHvR",
                 "Content-Type": "application/json"
             }
             payload = {
